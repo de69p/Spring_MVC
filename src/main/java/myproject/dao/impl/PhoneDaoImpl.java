@@ -1,12 +1,13 @@
-package java.myproject.dao.impl;
+package myproject.dao.impl;
 
+import myproject.domain.Phone;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.myproject.dao.CrudDao;
-import java.myproject.domain.Phone;
+import myproject.dao.CrudDao;
+
 import java.util.List;
 
 @Repository

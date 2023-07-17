@@ -1,4 +1,4 @@
-package java.myproject.domain;
+package myproject.domain;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,4 +24,13 @@ public class Phone {
     @ManyToOne
     @JoinColumn(name = "FK_Phone_Student")
     Student student;
+
+    @Override
+    public String toString() {
+        return "Truck{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+//                ", student=" + (student != null ? student.getFirstName() + " " + student.getLastName() : "N/A") +
+                '}';
+    }
 }

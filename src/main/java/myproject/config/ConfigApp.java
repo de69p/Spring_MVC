@@ -1,9 +1,8 @@
-package java.myproject.config;
+package myproject.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import myproject.config.security.SecurityConfig;
+import org.springframework.context.annotation.*;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -13,16 +12,18 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"java.myproject.dao", "java.myproject.service", "java.myproject.controller"})
+@ComponentScan(basePackages = {"myproject.dao", "myproject.service", "myproject.controller", "myproject.handler_exception"})
 @EnableTransactionManagement
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class ConfigApp {
+@EnableJpaRepositories(basePackages = "myproject.repository")
+public class ConfigApp implements WebMvcConfigurer {
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory factory) {
@@ -55,7 +56,7 @@ public class ConfigApp {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
         factoryBean.setDataSource(dataSource());
-        factoryBean.setPackagesToScan("java.myproject.domain");
+        factoryBean.setPackagesToScan("myproject.domain");
         return factoryBean;
     }
 

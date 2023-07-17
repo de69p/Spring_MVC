@@ -1,11 +1,11 @@
-package java.myproject.controller;
+package myproject.controller;
 
 import lombok.AllArgsConstructor;
+import myproject.domain.Student;
+import myproject.service.CrudService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.myproject.domain.Student;
-import java.myproject.service.CrudService;
 import java.util.List;
 
 @Controller
@@ -32,9 +32,9 @@ public class StudentController {
         service.delete(id);
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public void save(@RequestBody Student student) {
-        service.update(student);
+        service.add(student);
     }
 
     @PutMapping

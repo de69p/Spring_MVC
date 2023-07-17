@@ -1,20 +1,25 @@
-package java.myproject;
+package myproject;
 
+import myproject.config.ConfigApp;
+import myproject.domain.Phone;
+import myproject.domain.Student;
+import myproject.service.CrudService;
+import myproject.service.impl.PhoneServiceImpl;
+import myproject.service.impl.StudentDataService;
+import myproject.service.impl.StudentServiceImpl;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.myproject.config.ConfigApp;
-import java.myproject.domain.Phone;
-import java.myproject.domain.Student;
-import java.myproject.service.CrudService;
-import java.myproject.service.impl.PhoneServiceImpl;
-import java.myproject.service.impl.StudentServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConfigApp.class);
 
-        CrudService<Student> studentService = context.getBean(StudentServiceImpl.class);
-        CrudService<Phone> phoneService = context.getBean(PhoneServiceImpl.class);
+       /* CrudService<Student> studentService = context.getBean(StudentServiceImpl.class);
+        CrudService<Phone> phoneService = context.getBean(PhoneServiceImpl.class);*/
+
+        StudentDataService dataService = context.getBean(StudentDataService.class);
+
+        Student keanu = dataService.findByFirstNameAndEmail("Keanu", "reaves@icloud.com");
+        System.out.println(keanu);
 
 //        Phone phone = Phone.builder()
 //                .number("+1-212-213-2122")

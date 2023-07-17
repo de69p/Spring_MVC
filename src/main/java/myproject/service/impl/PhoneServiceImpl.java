@@ -1,11 +1,11 @@
-package java.myproject.service.impl;
+package myproject.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.myproject.dao.CrudDao;
-import java.myproject.domain.Phone;
-import java.myproject.service.CrudService;
+import myproject.dao.CrudDao;
+import myproject.domain.Phone;
+import myproject.service.CrudService;
 import java.util.List;
 
 @Service
