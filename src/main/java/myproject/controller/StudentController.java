@@ -2,45 +2,48 @@ package myproject.controller;
 
 import lombok.AllArgsConstructor;
 import myproject.domain.Student;
-import myproject.service.CrudService;
-import org.springframework.stereotype.Controller;
+//import myproject.service.CrudService;
+import myproject.service.impl.RoleServiceImpl;
+import myproject.service.impl.StudentServiceImpl;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/student")
 @AllArgsConstructor
 public class StudentController {
 
-    CrudService<Student> service;
+    private StudentServiceImpl studentServiceImpl;
+
+    private RoleServiceImpl roleServiceImpl;
 
     @GetMapping(value = "/{id}")
-    @ResponseBody
+    @Secured({"ROLE_USER"})
     public Student findById(@PathVariable("id") int id) {
-        return service.findById(id);
+        return studentServiceImpl.findById(id);
     }
 
     @GetMapping
-    @ResponseBody
+    @Secured({"ROLE_ADMIN"})
     public List<Student> findAll() {
-        return service.findAll();
+        return studentServiceImpl.findAll();
     }
 
     @DeleteMapping(value = "/{id}")
     public void deleteById(@PathVariable("id") int id) {
-        service.delete(id);
+        studentServiceImpl.delete(id);
     }
 
     @PostMapping("/save")
     public void save(@RequestBody Student student) {
-        service.add(student);
+        studentServiceImpl.add(student);
     }
 
     @PutMapping
     public void update(@RequestBody Student student) {
-        service.add(student);
+        studentServiceImpl.update(student);
     }
-
 
 }

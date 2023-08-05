@@ -22,7 +22,7 @@ public class Phone {
     String number;
 
     @ManyToOne
-    @JoinColumn(name = "FK_Phone_Student")
+    @JoinColumn(name = "FK_phone_student")
     Student student;
 
     @Override

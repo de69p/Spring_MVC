@@ -1,10 +1,13 @@
 package myproject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -13,11 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "student")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "student_id")
     int id;
 
     @Column(name = "first_name")
@@ -34,9 +38,9 @@ public class Student {
     List<Phone> phones;
 
     @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "FK_User"),
-    inverseJoinColumns = @JoinColumn(name = "FK_Role"))
-    List<Role> roles;
+    @JoinTable(name = "student_role", joinColumns = @JoinColumn(name = "FK_student"),
+    inverseJoinColumns = @JoinColumn(name = "FK_role"))
+    Set<Role> roles;
 
     private String getPhonesAsString() {
         if (phones != null && !phones.isEmpty()) {

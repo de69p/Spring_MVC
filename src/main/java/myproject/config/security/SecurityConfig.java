@@ -2,7 +2,10 @@ package myproject.config.security;
 
 import lombok.AllArgsConstructor;
 import myproject.config.ConfigApp;
+import myproject.jwt.JwtAuthenticationEntryPoint;
+import myproject.jwt.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,19 +13,24 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @Import({EncoderConfig.class, ConfigApp.class})
 @EnableWebSecurity
+@ComponentScan(basePackages = "myproject.jwt")
 @EnableMethodSecurity(securedEnabled = true)
 @AllArgsConstructor
 public class SecurityConfig {
 
     UserDetailsService service;
+    JwtAuthenticationEntryPoint entryPoint;
+    JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
@@ -39,15 +47,29 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/security/user").hasRole("USER")
+                        req
+                                .requestMatchers("/jwt/registration", "/jwt/authenticate").permitAll()
+                                .requestMatchers("/login*").permitAll()
+                                .requestMatchers("/security/user").hasRole("USER")
                                 .requestMatchers("/security/admin").hasRole("ADMIN")
-                                .requestMatchers("/student/save").permitAll()
-                                .anyRequest()
-                                .authenticated())
-                .formLogin();
-            //    .defaultSuccessUrl("/find/all");
+                                .requestMatchers("/student/save", "/role/save").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .formLogin()
+                .and()
+                .logout()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(entryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
 
     /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)  throws Exception {
@@ -65,6 +87,4 @@ public class SecurityConfig {
     public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
     }
-
-
 }

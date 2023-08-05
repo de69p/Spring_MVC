@@ -11,11 +11,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "role")
 public class Role {
 
     @Id
     @GeneratedValue
-            @Column(name = "role_id")
+    @Column(name = "role_id")
     int id;
 
     @Enumerated(EnumType.STRING)

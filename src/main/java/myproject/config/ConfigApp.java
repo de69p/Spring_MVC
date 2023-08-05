@@ -1,6 +1,5 @@
 package myproject.config;
 
-import myproject.config.security.SecurityConfig;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -18,7 +17,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"myproject.dao", "myproject.service", "myproject.controller", "myproject.handler_exception"})
+@ComponentScan(basePackages = {"myproject.dao", "myproject.service", "myproject.jwt",
+        "myproject.controller", "myproject.handler_exception"})
 @EnableTransactionManagement
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)

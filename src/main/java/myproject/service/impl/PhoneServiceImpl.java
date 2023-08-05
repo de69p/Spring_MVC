@@ -1,41 +1,36 @@
 package myproject.service.impl;
 
 import lombok.AllArgsConstructor;
+import myproject.domain.Phone;
+import myproject.repository.PhoneRepository;
+import myproject.service.CrudService;
 import org.springframework.stereotype.Service;
 
-import myproject.dao.CrudDao;
-import myproject.domain.Phone;
-import myproject.service.CrudService;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class PhoneServiceImpl implements CrudService<Phone> {
 
-    private CrudDao<Phone> dao;
+    private final PhoneRepository phoneRepository;
 
-    @Override
     public void add(Phone entity) {
-        dao.add(entity);
+        phoneRepository.save(entity);
     }
 
-    @Override
-    public Phone findById(Integer id) {
-        return dao.findById(id);
+    public Phone findById(int id) {
+        return phoneRepository.findById(id);
     }
 
-    @Override
     public List<Phone> findAll() {
-        return dao.findAll();
+        return phoneRepository.findAll();
     }
 
-    @Override
     public void update(Phone entity) {
-        dao.update(entity);
+        phoneRepository.save(entity);
     }
 
-    @Override
-    public void delete(Integer id) {
-        dao.delete(id);
+    public void deleteById(int id) {
+        phoneRepository.deleteById(id);
     }
 }

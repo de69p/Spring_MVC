@@ -1,44 +1,46 @@
 package myproject.service.impl;
 
 import lombok.AllArgsConstructor;
-import myproject.domain.Phone;
+import myproject.repository.StudentRepository;
+import myproject.service.PasswordService;
 import org.springframework.stereotype.Service;
 
-import myproject.dao.CrudDao;
 import myproject.domain.Student;
-import myproject.service.CrudService;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class StudentServiceImpl implements CrudService<Student> {
+public class StudentServiceImpl {
 
-    private CrudDao<Student> studentDao;
+    private final PasswordService passwordService;
+    private final StudentRepository studentRepository;
 
-    private CrudDao<Phone> phoneDao;
-
-    @Override
     public void add(Student student) {
-        studentDao.add(student);
+        String password = student.getPassword();
+        student.getPhones().forEach(ph -> ph.setStudent(student));
+        String encodedPassword = passwordService.encodePassword(password);
+        student.setPassword(encodedPassword);
+        studentRepository.save(student);
     }
 
-    @Override
     public Student findById(Integer id) {
-        return studentDao.findById(id);
+        return studentRepository.findStudentById(id);
     }
 
-    @Override
     public List<Student> findAll() {
-        return studentDao.findAll();
+        return studentRepository.findAll();
     }
 
-    @Override
     public void update(Student student) {
-        studentDao.update(student);
+        studentRepository.save(student);
     }
 
-    @Override
     public void delete(Integer id) {
-        studentDao.delete(id);
+        studentRepository.deleteById(id);
     }
+
+    public Student findByFirstNameAndEmail(String firstName, String email) {
+        return studentRepository.findByFirstNameAndEmail(firstName, email);
+    }
+
 }
